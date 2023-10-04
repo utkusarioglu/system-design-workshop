@@ -1,0 +1,14 @@
+{
+  "yaml.schemas": {
+    "https://json.schemastore.org/helmfile.json": "**/*.helm",
+    "https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/schemas/v3.1/schema.json": "file:///home/utkusarioglu/dev/workshops/system-design-workshop/src/twitter/public.api.yml"
+  },
+  "emeraldwalk.runonsave": {
+    "commands": [
+      {
+        "cmd": "d2 fmt ${file}",
+        "match": ".d2"
+      }
+    ]
+  }
+}
