@@ -1,0 +1,36 @@
+...@lib/style
+...@lib/stereotype
+...@lib/cardinality
+
+USER: @lib/entity.USER
+FOLLOW: @lib/entity.FOLLOW
+A_USER_USER_FOLLOW: @lib/entity.A_USER_USER_FOLLOW
+
+USER -- USER: {
+  label: follows
+  class: [
+    edge_logical
+    cardinality_many_many
+  ]
+}
+
+USER.user_id -- A_USER_USER_FOLLOW.source_user_id: {
+  label: relates follower
+  class: [
+    cardinality_many_1
+  ]
+}
+
+A_USER_USER_FOLLOW.target_user_id -- USER.user_id: {
+  label: relates followed
+  class: [
+    cardinality_1_1many
+  ]
+}
+
+A_USER_USER_FOLLOW.follow_id -- FOLLOW.follow_id: {
+  label: stores follow specs
+  class: [
+    cardinality_1_1
+  ]
+}

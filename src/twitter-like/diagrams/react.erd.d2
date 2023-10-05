@@ -1,0 +1,20 @@
+...@lib/style
+...@lib/stereotype
+...@lib/cardinality
+
+USER: @lib/entity.USER
+REACTION: @lib/entity.REACTION
+A_USER_REACTION: @lib/entity.A_USER_REACTION
+
+USER -- REACTION: {
+  label: creates (likes, emotes, etc)
+  class: edge_logical
+}
+
+USER.user_id -- A_USER_REACTION.user_id: {
+  class: cardinality_many_1
+}
+
+A_USER_REACTION.reaction_id -- REACTION.reaction_id: {
+  class: cardinality_1_1
+}

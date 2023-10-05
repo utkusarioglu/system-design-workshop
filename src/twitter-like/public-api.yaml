@@ -1,0 +1,92 @@
+openapi: 3.1.1
+info:
+  title: Twitter-Like Public Api V1
+  version: 1.0.0
+servers:
+  - url: https://www.twitter-like.com/api/v1
+
+paths:
+  /auth/login:
+    post:
+      summary: Visitor logs in to become a user
+      description: |
+        Requirements: 9
+  /auth/logout:
+    put: 
+      summary: User requests this route to become a visitor
+      description: |
+        Requirements: 9
+  /auth/sign-up:
+    post:
+      summary: visitor registers to become a user
+      description: |
+        Requirements: 9
+
+  /tweet:
+    post:
+      summary: User posts a new tweet
+      description: |
+        Requirements: 1, 3, 9, 10
+  /tweet/{tweet_id}:
+    delete:
+      summary: User deletes their own tweet
+      description: |
+        Requirements: 2, 9
+
+  /reactions/tweet/{tweet_id}/like:
+    put:
+      summary: User likes a tweet
+      description: |
+        Requirements: 4
+  /reactions/tweet/{tweet_id}/unlike:
+    put:
+      summary: User unlikes a tweet
+      description: |
+        Requirements: 4
+
+  /user/{user_id}/follow:
+    put:
+      summary: User follows another user
+      description: |
+        Requirements: 5
+  /user/{user_id}/unfollow:
+    put:
+      summary: User unfollows another user
+      description: |
+        Requirements: 5
+
+  /timeline/{user_id}:
+     get:
+        summary: |
+          User retrieves another user's posts, it can also be their own posts
+        description: |
+          Requirements: 7, 9
+
+  /feed:
+    get:
+      summary: |
+        User retrieves the most recent feed that was curated for them.
+      description: |
+        Requirements: 6, 9
+      parameters:
+        - name: hash
+          description: |
+            Feed hash in case user scrolls too far down and more from the same
+            feed version needs to be retrieved for the user.
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: offset
+          description: Offset for the feed loading, needed for pagination.
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: limit
+          description: Number of posts requested, needed for pagination.
+          in: query
+          required: false
+          schema:
+            type: integer
+          

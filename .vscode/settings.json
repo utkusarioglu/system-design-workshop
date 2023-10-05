@@ -1,7 +1,9 @@
 {
   "yaml.schemas": {
     "https://json.schemastore.org/helmfile.json": "**/*.helm",
-    "https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/schemas/v3.1/schema.json": "file:///home/utkusarioglu/dev/workshops/system-design-workshop/src/twitter/public.api.yml"
+    "https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/schemas/v3.1/schema.json": [
+      "file:///home/utkusarioglu/dev/workshops/system-design-workshop/src/twitter-like/public-api.yaml"
+    ]
   },
   "emeraldwalk.runonsave": {
     "commands": [

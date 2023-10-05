@@ -1,0 +1,35 @@
+...@lib/service
+...@lib/style
+
+user -- gateway
+
+gateway -- search
+gateway -- tweets
+gateway -- social_graph
+gateway -- users
+gateway -- feeds
+
+users -- authentication
+
+fanout <- search
+fanout <- social_graph
+fanout <- tweets
+fanout -> feeds
+
+search -- storage
+tweets -- storage
+social_graph -- storage
+users -- storage
+
+# Styles
+
+(* -- storage)[*]: {
+  class: edge_3
+}
+
+(gateway -- *)[*]: {
+  class: edge_2
+}
+
+all.class: all_nodes
+Analytics -- all

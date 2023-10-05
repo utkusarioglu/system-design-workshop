@@ -1,0 +1,67 @@
+USER: {
+  shape: sql_table
+  class: __entity_strong__
+
+  user_id: SERIAL {constraint: PK}
+
+  username: VARCHAR(20) {constraint: UNQ, CK2}
+  email: VARCHAR(30) {constraint: UNQ, CK1}
+  password: CHAR(64) {constraint: CK1, CK2}
+
+  profile_photo_url: VARCHAR(60)
+  first_name: VARCHAR(20)
+  middle_name: VARCHAR(20)
+  last_name: VARCHAR(20)
+  date_of_birth: DATETIME
+  creation_date: DATETIMETZ
+}
+
+TWEET: {
+  shape: sql_table
+  class: __entity_strong__
+
+  tweet_id: SERIAL {constraint: PK}
+  content_text: VARCHAR(140)
+  creation_date: DATETIMETZ
+}
+
+REACTION: {
+  shape: sql_table
+  class: __entity_weak__
+
+  reaction_id: SERIAL {constraint: PK}
+  reaction_type: ENUM
+}
+
+FOLLOW: {
+  shape: sql_table
+  class: __entity_weak__
+
+  follow_id: SERIAL {constraint: PK}
+  creation_date: DATETIMETZ
+}
+
+A_USER_TWEET: {
+  shape: sql_table
+  class: __entity_associative__
+
+  user_id: INT {constraint: FK}
+  tweet_id: INT {constraint: FK}
+}
+
+A_USER_USER_FOLLOW: {
+  shape: sql_table
+  class: __entity_associative__
+
+  source_user_id: INT {constraint: FK}
+  target_user_id: INT {constraint: FK}
+  follow_id: INT {constraint: FK}
+}
+
+A_USER_REACTION: {
+  shape: sql_table
+  class: __entity_associative__
+
+  user_id: INT {constraint: FK}
+  reaction_id: INT {constraint: FK}
+}

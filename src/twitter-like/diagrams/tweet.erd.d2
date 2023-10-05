@@ -1,0 +1,23 @@
+...@lib/style
+...@lib/stereotype
+...@lib/cardinality
+
+USER: @lib/entity.USER
+TWEET: @lib/entity.TWEET
+A_USER_TWEET: @lib/entity.A_USER_TWEET
+
+USER.user_id -- A_USER_TWEET.user_id: {
+  class: cardinality_many_1
+}
+
+A_USER_TWEET.tweet_id -- TWEET.tweet_id: {
+  class: cardinality_1_1
+}
+
+USER -- TWEET: {
+  label: posts
+  class: [
+    edge_logical
+    cardinality_many_1
+  ]
+}

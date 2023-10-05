@@ -1,0 +1,42 @@
+# Tweet data
+tweets
+
+# User account data
+users
+
+# Keeps track of:
+#   Who follows whomo
+#   Who likes posts from whom
+#   Tags associated with the likes and follows
+social_graph
+
+# Create currated feeds for users
+fanout
+
+# Allow searching for both services and for users
+search
+
+# Collects data on the how the system is run and used
+analytics
+
+# Authorize and authenticate users
+authentication
+
+# Provide public access to services that are relevant to the users
+gateway
+
+# Stores currated feeds for the users
+feeds
+
+*: {
+  shape: package
+}
+
+storage: {
+  shape: cylinder
+}
+
+user: {
+  shape: person
+  class: person
+}
