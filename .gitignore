@@ -1,2 +1,4 @@
 **/diagrams/**/.svg
 .ignore
+
+~$*.xlsx
