@@ -1,0 +1,40 @@
+Hash Index Write: {
+  shape: sequence_diagram
+
+  User
+
+  Handler
+  Hash
+  Index
+
+  Storage
+  Segment
+  OffsetRecord
+
+  Creation: {
+    User -> Handler: write(key, value)
+
+    Key Hashing: {
+      Handler -> Hash: getHash(key)
+      Hash -> Handler: hashedKey
+    }
+
+    Saving Value to Disk: {
+      Opt: {
+        "[fileSize > limit]": {
+          Storage -> Segment: createNewSegment()
+          Segment -> Storage: offsetStart, segmentPath
+          Storage -> OffsetRecord: updateOffsetTable(offsetStart, segmentPath)
+        }
+      }
+      Handler -> Storage: write(hashedKey, value)
+      Storage -> Handler: offset
+    }
+
+    Associating Offset with Hash in Memory: {
+      Handler -> Index: saveIndex(hashedKey, offset)
+    }
+
+    Handler -> User: ok
+  }
+}

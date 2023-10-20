@@ -1,0 +1,41 @@
+Hash Index Read: {
+  shape: sequence_diagram
+
+  User
+
+  Handler
+  Hash
+  Index
+
+  Storage
+  Segment
+  OffsetRecord
+
+  User -> Handler: read(key)
+
+  Handler -> Hash: createHash(key)
+  Hash -> Handler: hashedKey
+
+  Opt: {
+    "[!!offset = true]": {
+      Handler -> Index: getOffset(hashedKey)
+      Index -> Handler: offset
+
+      Handler -> Storage: readValue(offset)
+      Storage -> OffsetRecord: getOffsetPath(offset)
+      OffsetRecord -> Storage: offsetPath
+      Storage -> Segment: readOffset(offsetPath, offset)
+      Segment -> Storage: value
+      Segment -> Handler: value
+
+      Handler -> User: value
+    }
+
+    "[!!offset = false]": {
+      Handler -> Index: getOffset(hashedKey)
+      Index -> Handler: "null"
+
+      Handler -> User: "null"
+    }
+  }
+}
