@@ -1,0 +1,44 @@
+Hash Index Compaction: {
+  shape: sequence_diagram
+
+  Cron
+  Storage
+  Segment
+  Merger
+  OffsetRecord
+
+  Collect segments to compact: {
+    Cron -> Storage: getOldest(2)
+    Storage -> Cron: "[segmentPath, segmentPath]"
+  }
+
+  Create new compact segment to populate: {
+    Cron -> Storage: createNewCompactSegment()
+    Storage -> Segment: createCompactSegment()
+    Segment -> Storage: segmentPath
+  }
+
+  Merge the segments: {
+    Cron -> Merger: "mergeSegments([segmentPath, segmentPath])"
+    Merger -> Cron: mergedSegment
+  }
+
+  Write the new compact segment: {
+    Cron -> Storage: writeSegment(segmentPath, mergedSegment)
+    Storage -> Segment: saveSegment(segmentPath, mergedSegment)
+    Segment -> Storage: ok
+    Storage -> Cron: ok
+  }
+
+  Update offset record for where the handler should find the offsets range: {
+    Cron -> OffsetRecord: updateOffsets(segmentPath, offsetStart, offsetEnd)
+    OffsetRecord -> Cron: ok
+  }
+
+  Remove compacted files: {
+    Cron -> Storage: "deleteSegments([segmentPath, segmentPath])"
+    Storage -> Segment: "deleteSegments([segmentPath, segmentPath])"
+    Segment -> Storage: ok
+    Storage -> Cron: ok
+  }
+}

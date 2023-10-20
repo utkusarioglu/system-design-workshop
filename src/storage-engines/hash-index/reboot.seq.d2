@@ -1,0 +1,13 @@
+Hash Index Reboot: {
+  shape: sequence_diagram
+
+  Handler
+  Index
+  Storage
+
+  Handler -> Storage: streamSegments(startOffset, endOffset)
+  "[loop]": {
+    Storage -> Handler: "[record, record, record, ...]"
+    Handler -> Index: saveIndex(hashedKey, offset)
+  }
+}
