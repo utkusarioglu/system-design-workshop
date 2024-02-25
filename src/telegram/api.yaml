@@ -1,0 +1,52 @@
+openapi: 3.1.1
+
+info: 
+  title: Telegram messaging features api
+  version: 1.0.0
+
+servers: 
+  - url: https://www.telegram.com
+
+paths:
+  /message/v1/{roomId}/send:
+    post:
+      summary: Endpoint for the user to send a new message to a person/group.
+      parameters:
+        - name: roomId
+          in: path
+          required: true
+          allowEmptyValue: false
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                senderId: 
+                  type: string # uuid
+                roomId: 
+                  type: string # uuid
+                text:
+                  type: string # actual message content
+      responses:
+        200: 
+          description: Message receives to the SERVER successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messageId:
+                    type: string # uuid 
+        3xx:
+          description: Unauthorized client trying to send a message
+        4xx:
+          description: Client-side error 
+        5xx:
+          description: Server-side error
+
+  # If polling/ long polling is used
+  /message/v1/{roomId}/receive:
+  
+  /message/v1/all/receive:

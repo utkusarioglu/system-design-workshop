@@ -1,0 +1,62 @@
+openapi: 3.1.1
+info:
+    title: Spot occupancy registration endpoint for detection hardware
+    version: 1.0.0
+servers:
+    - url: https://www.parking-lot.com/api/v1
+paths:
+  /spot/{spotId}/occupancy:
+    put: 
+      summary: informs the system of any change in the occupancy of a spot
+      parameters:
+        - name: spotId
+          in: path
+          required: true
+          allowEmptyValue: false
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                occupied:
+                  type: boolean
+                licensePlate:
+                  type: string
+              required:
+                - occupied
+
+    /entry/{entryId}/arrival:
+      post:
+        summary: Receives a new vehicle at an entrypoint awaiting entry
+        parameters:
+          - name: entryId
+            description: Id assigned to a particular entrypoint
+            required: true
+            allowEmptyValue: false
+        requestBody:
+          required: true
+          application/json:
+          schema:
+            type: object
+            properties:
+              licensePlate:
+                type: string
+
+    /exit/{exitId}/arrival:
+      post:
+        summary: Receives a new vehicle at an entrypoint awaiting entry
+        parameters:
+          - name: entryId
+            description: Id assigned to a particular entrypoint
+            required: true
+            allowEmptyValue: false
+        requestBody:
+          required: true
+          application/json:
+          schema:
+            type: object
+            properties:
+              licensePlate:
+                type: string

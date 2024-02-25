@@ -1,0 +1,59 @@
+LSM Trees Regular Write: {
+  shape: sequence_diagram
+
+  Consumer
+
+  Handler
+
+  SSTable
+
+  Storage
+  SparseIndex
+  OffsetRecord
+  Segment
+
+  Consumer.request -> Handler.write: key, value
+  Handler -> SSTable.write: key, value
+  SSTable.sort -> SSTable.sort
+  SSTable.write -> Handler: OK
+  Handler.write -> Consumer.request: OK, ssTableFull
+
+  "[opt]": {
+    "[ssTableFull = true]": {
+      Handler -> SSTable.createNewTable
+      SSTable.createNewTable -> Handler: OK
+
+      SSTable -> Storage.mergeNewSegment: sortedSsTable
+      "[loop]": {
+        Storage -> SparseIndex.getOffsets: "key[]"
+        SparseIndex.getOffsets -> Storage: "segmentOffset[]"
+
+        Storage -> OffsetRecord.getSegmentPaths: "segmentOffset[]"
+        OffsetRecord.getSegmentPaths -> Storage: "path[]"
+
+        "[loop]": {
+          Storage -> Segment.updateValue: path, key, value
+        }
+      }
+    }
+  }
+}
+
+# LSM Trees SSTable Full Write: {
+#   shape: sequence_diagram
+
+#   Consumer
+
+#   Handler
+
+#   SSTable
+#   SparseIndex
+
+#   Storage
+#   Segment
+#   OffsetRecord
+
+#   Consumer.request -> Handler.write: key, value
+#   Handler -> SSTable.write: key, value
+#   SSTable.write -> Handler: tableFull
+# }

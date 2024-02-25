@@ -1,0 +1,55 @@
+LSM Tree Read: {
+  shape: sequence_diagram
+
+  Consumer
+  Handler
+  SparseIndex
+  SSTable
+
+  Storage
+  Segment
+  OffsetRecord
+
+  Consumer -> Handler.read: key
+  Handler -> SSTable.findValue: key
+
+  "[opt1]": {
+    "[key = null]": {
+      SSTable.findValue -> Handler: "null"
+
+      Handler -> SparseIndex.findSegmentOffset: key
+
+      "[opt2]": {
+        "[segmentOffset = null]": {
+          SparseIndex.findSegmentOffset -> Handler: "null"
+          Handler.read -> Consumer: "null"
+        }
+
+        "[segmentOffset != null]": {
+          SparseIndex.findSegmentOffset -> Handler: segmentOffset
+          SparseIndex.findSegmentOffset.|md
+            `segmentOffset` points to the start offset of a segment file.
+            Storage component will have to search for the key starting from 
+            this offset.
+          |
+
+          Handler -> Storage.getValue: key, segmentOffset
+
+          Storage -> OffsetRecord.getSegmentPath: segmentOffset
+          OffsetRecord.getSegmentPath -> Storage: path
+
+          Storage -> Segment.getValue: path, key
+          Segment.getValue -> Storage: value
+
+          Storage.getValue -> Handler: value
+          Handler.read -> Consumer: value
+        }
+      }
+    }
+
+    "[key != null]": {
+      SSTable.findValue -> Handler: value
+      Handler.read -> Consumer: value
+    }
+  }
+}
