@@ -1,0 +1,44 @@
+openapi: 3.1.1
+
+info:
+  title: Youtube-like video sharing platform
+  version: 1.0
+
+servers:
+  - url: https://www.youtube.com
+
+paths:
+  /v1/video/upload:
+    POST:
+      summary: Video upload endpoint
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                video:
+                  type: blob
+                title:
+                  type: string
+                description:
+                  type: string
+
+  /v1/video/view/{videoId}:
+    GET:
+      summary: Responds with the video file that the player consumes
+      parameters:
+        - description: Id of the video file that is being requested
+          in: path
+          name: videoId
+          required: true
+  
+  /watch?v={videoId}:
+    GET:
+      summary: The web page that displays the video with the given id
+      parameters:
+        - name: videoId
+          description: Id of the video
+          in: path
+          required: true
